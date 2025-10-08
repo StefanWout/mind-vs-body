@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 import { ArrowLeft, Save, CalendarIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -40,6 +41,7 @@ export default function DailyLog() {
     hadHeadache: null,
     headacheTime: null,
     tookMedication: null,
+    notes: null,
   });
 
   useEffect(() => {
@@ -71,6 +73,7 @@ export default function DailyLog() {
         hadHeadache: null,
         headacheTime: null,
         tookMedication: null,
+        notes: null,
       });
     }
   };
@@ -94,6 +97,7 @@ export default function DailyLog() {
       hadHeadache: entry.hadHeadache || null,
       headacheTime: entry.headacheTime || null,
       tookMedication: entry.tookMedication || null,
+      notes: entry.notes || null,
       createdAt: entry.createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
@@ -261,6 +265,16 @@ export default function DailyLog() {
             value={entry.moodEvening || null}
             onChange={(value) => setEntry({ ...entry, moodEvening: value })}
             label="Evening Mood"
+          />
+        </Card>
+
+        <Card className="p-6 space-y-3 shadow-card border-border">
+          <h2 className="text-lg font-semibold text-foreground">Additional Notes</h2>
+          <Textarea
+            value={entry.notes || ''}
+            onChange={(e) => setEntry({ ...entry, notes: e.target.value })}
+            placeholder="Add any additional notes or observations about your day..."
+            className="min-h-[120px] rounded-2xl border-border bg-card text-foreground resize-none"
           />
         </Card>
 

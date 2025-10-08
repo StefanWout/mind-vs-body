@@ -31,6 +31,7 @@ export const storage = {
         hadHeadache: entry.had_headache,
         headacheTime: entry.headache_time,
         tookMedication: entry.took_medication,
+        notes: entry.notes,
         createdAt: entry.created_at,
         updatedAt: entry.updated_at
       }));
@@ -61,7 +62,8 @@ export const storage = {
         pee_time: entry.peeTime,
         had_headache: entry.hadHeadache,
         headache_time: entry.headacheTime,
-        took_medication: entry.tookMedication
+        took_medication: entry.tookMedication,
+        notes: entry.notes
       };
 
       const { error } = await supabase
@@ -107,6 +109,7 @@ export const storage = {
         hadHeadache: data.had_headache,
         headacheTime: data.headache_time,
         tookMedication: data.took_medication,
+        notes: data.notes,
         createdAt: data.created_at,
         updatedAt: data.updated_at
       };
