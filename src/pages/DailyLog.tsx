@@ -99,20 +99,6 @@ export default function DailyLog() {
             onChange={(value) => setEntry({ ...entry, periodStatus: value })}
             label="Period Status"
           />
-
-          <ToggleInput
-            value={entry.nausea || null}
-            onChange={(value) => setEntry({ ...entry, nausea: value })}
-            label="Experiencing Nausea?"
-          />
-
-          {entry.nausea && (
-            <TimeInput
-              value={entry.nauseaTime || null}
-              onChange={(value) => setEntry({ ...entry, nauseaTime: value })}
-              label="What time did nausea start?"
-            />
-          )}
         </Card>
 
         <Card className="p-6 space-y-6 shadow-card border-border">
@@ -152,6 +138,20 @@ export default function DailyLog() {
         <Card className="p-6 space-y-6 shadow-card border-border">
           <h2 className="text-lg font-semibold text-foreground">Pain & Discomfort</h2>
           
+          <ToggleInput
+            value={entry.nausea || null}
+            onChange={(value) => setEntry({ ...entry, nausea: value })}
+            label="Experiencing Nausea?"
+          />
+
+          {entry.nausea && (
+            <TimeInput
+              value={entry.nauseaTime || null}
+              onChange={(value) => setEntry({ ...entry, nauseaTime: value })}
+              label="What time did nausea start?"
+            />
+          )}
+
           <ToggleInput
             value={entry.hadHeadache || null}
             onChange={(value) => setEntry({ ...entry, hadHeadache: value })}
