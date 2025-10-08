@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { format } from 'date-fns';
 import { DailyEntry, PeriodStatus, PoopConsistency } from '@/types/tracking';
 import { storage } from '@/lib/storage';
 import { useAuth } from '@/hooks/useAuth';
@@ -11,14 +12,18 @@ import { NumberInput } from '@/components/NumberInput';
 import { TimeInput } from '@/components/TimeInput';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { toast } from 'sonner';
-import { ArrowLeft, Save } from 'lucide-react';
+import { ArrowLeft, Save, CalendarIcon } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export default function DailyLog() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   const today = new Date().toISOString().split('T')[0];
   
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [entry, setEntry] = useState<Partial<DailyEntry>>({
     date: today,
     periodStatus: null,
@@ -40,19 +45,39 @@ export default function DailyLog() {
     if (!loading && user) {
       loadEntry();
     }
-  }, [loading, user, today]);
+  }, [loading, user, selectedDate]);
 
   const loadEntry = async () => {
-    const existingEntry = await storage.getEntryByDate(today);
+    const dateString = selectedDate.toISOString().split('T')[0];
+    const existingEntry = await storage.getEntryByDate(dateString);
     if (existingEntry) {
       setEntry(existingEntry);
+    } else {
+      // Reset entry for new date
+      setEntry({
+        date: dateString,
+        periodStatus: null,
+        nausea: null,
+        nauseaTime: null,
+        moodMorning: null,
+        moodMidday: null,
+        moodEvening: null,
+        poopQuantity: null,
+        poopConsistency: null,
+        sleepQuality: null,
+        gotUpToPee: null,
+        hadHeadache: null,
+        headacheTime: null,
+        tookMedication: null,
+      });
     }
   };
 
   const handleSave = async () => {
+    const dateString = selectedDate.toISOString().split('T')[0];
     const completeEntry: DailyEntry = {
       id: entry.id || `entry-${Date.now()}`,
-      date: today,
+      date: dateString,
       periodStatus: entry.periodStatus || null,
       nausea: entry.nausea || null,
       nauseaTime: entry.nauseaTime || null,
@@ -95,15 +120,32 @@ export default function DailyLog() {
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <div>
+          <div className="flex-1">
             <h1 className="text-xl font-bold text-foreground">Daily Log</h1>
-            <p className="text-sm text-muted-foreground">
-              {new Date(today).toLocaleDateString('en-US', { 
-                weekday: 'long', 
-                month: 'long', 
-                day: 'numeric' 
-              })}
-            </p>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className={cn(
+                    "h-auto p-0 text-sm text-muted-foreground hover:text-foreground font-normal hover:bg-transparent",
+                    "flex items-center gap-1"
+                  )}
+                >
+                  <CalendarIcon className="h-4 w-4" />
+                  {format(selectedDate, 'EEEE, MMMM d, yyyy')}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={selectedDate}
+                  onSelect={(date) => date && setSelectedDate(date)}
+                  disabled={(date) => date > new Date()}
+                  initialFocus
+                  className={cn("p-3 pointer-events-auto")}
+                />
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
       </header>
