@@ -10,6 +10,8 @@ export interface DailyEntry {
   moodMorning: number | null; // 1-5
   moodMidday: number | null; // 1-5
   moodEvening: number | null; // 1-5
+  morningProductivity: number | null; // 1-5
+  afternoonProductivity: number | null; // 1-5
   poopQuantity: number | null;
   poopConsistency: PoopConsistency | null;
   sleepQuality: number | null; // 1-5

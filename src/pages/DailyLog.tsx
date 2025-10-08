@@ -33,6 +33,8 @@ export default function DailyLog() {
     moodMorning: null,
     moodMidday: null,
     moodEvening: null,
+    morningProductivity: null,
+    afternoonProductivity: null,
     poopQuantity: null,
     poopConsistency: null,
     sleepQuality: null,
@@ -65,6 +67,8 @@ export default function DailyLog() {
         moodMorning: null,
         moodMidday: null,
         moodEvening: null,
+        morningProductivity: null,
+        afternoonProductivity: null,
         poopQuantity: null,
         poopConsistency: null,
         sleepQuality: null,
@@ -89,6 +93,8 @@ export default function DailyLog() {
       moodMorning: entry.moodMorning || null,
       moodMidday: entry.moodMidday || null,
       moodEvening: entry.moodEvening || null,
+      morningProductivity: entry.morningProductivity || null,
+      afternoonProductivity: entry.afternoonProductivity || null,
       poopQuantity: entry.poopQuantity || null,
       poopConsistency: entry.poopConsistency || null,
       sleepQuality: entry.sleepQuality || null,
@@ -265,6 +271,22 @@ export default function DailyLog() {
             value={entry.moodEvening || null}
             onChange={(value) => setEntry({ ...entry, moodEvening: value })}
             label="Evening Mood"
+          />
+        </Card>
+
+        <Card className="p-6 space-y-6 shadow-card border-border">
+          <h2 className="text-lg font-semibold text-foreground">Productivity Throughout the Day</h2>
+          
+          <ScaleInput
+            value={entry.morningProductivity || null}
+            onChange={(value) => setEntry({ ...entry, morningProductivity: value })}
+            label="Morning Productivity"
+          />
+
+          <ScaleInput
+            value={entry.afternoonProductivity || null}
+            onChange={(value) => setEntry({ ...entry, afternoonProductivity: value })}
+            label="Afternoon Productivity"
           />
         </Card>
 

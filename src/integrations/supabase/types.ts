@@ -16,6 +16,7 @@ export type Database = {
     Tables: {
       daily_entries: {
         Row: {
+          afternoon_productivity: number | null
           created_at: string
           date: string
           got_up_to_pee: boolean | null
@@ -25,6 +26,7 @@ export type Database = {
           mood_evening: number | null
           mood_midday: number | null
           mood_morning: number | null
+          morning_productivity: number | null
           nausea: boolean | null
           nausea_time: string | null
           notes: string | null
@@ -38,6 +40,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          afternoon_productivity?: number | null
           created_at?: string
           date: string
           got_up_to_pee?: boolean | null
@@ -47,6 +50,7 @@ export type Database = {
           mood_evening?: number | null
           mood_midday?: number | null
           mood_morning?: number | null
+          morning_productivity?: number | null
           nausea?: boolean | null
           nausea_time?: string | null
           notes?: string | null
@@ -60,6 +64,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          afternoon_productivity?: number | null
           created_at?: string
           date?: string
           got_up_to_pee?: boolean | null
@@ -69,6 +74,7 @@ export type Database = {
           mood_evening?: number | null
           mood_midday?: number | null
           mood_morning?: number | null
+          morning_productivity?: number | null
           nausea?: boolean | null
           nausea_time?: string | null
           notes?: string | null
