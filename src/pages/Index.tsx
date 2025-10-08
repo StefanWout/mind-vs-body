@@ -1,17 +1,38 @@
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { storage } from '@/lib/storage';
+import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { PlusCircle, TrendingUp, Calendar } from 'lucide-react';
+import { PlusCircle, TrendingUp, Calendar, LogOut } from 'lucide-react';
+import { DailyEntry } from '@/types/tracking';
 import heroImage from '@/assets/wellness-hero.jpg';
 
 const Index = () => {
   const navigate = useNavigate();
-  const entries = storage.getEntries();
+  const { user, loading, signOut } = useAuth();
+  const [entries, setEntries] = useState<DailyEntry[]>([]);
+  const [todayEntry, setTodayEntry] = useState<DailyEntry | null>(null);
   const today = new Date().toISOString().split('T')[0];
-  const todayEntry = storage.getEntryByDate(today);
+
+  useEffect(() => {
+    if (!loading && user) {
+      loadEntries();
+    }
+  }, [loading, user]);
+
+  const loadEntries = async () => {
+    const allEntries = await storage.getEntries();
+    setEntries(allEntries);
+    const entry = await storage.getEntryByDate(today);
+    setTodayEntry(entry);
+  };
 
   const recentEntries = entries.slice(0, 3);
+
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-soft pb-24">
@@ -24,13 +45,25 @@ const Index = () => {
           />
           <div className="absolute inset-0 bg-gradient-primary opacity-60" />
         </div>
-        <div className="relative max-w-md mx-auto px-4 py-12 text-center">
-          <h1 className="text-4xl font-bold text-primary-foreground mb-3">
-            Wellness Tracker
-          </h1>
-          <p className="text-primary-foreground/90 text-lg">
-            Track your health journey with care
-          </p>
+        <div className="relative max-w-md mx-auto px-4 py-12">
+          <div className="flex items-center justify-between mb-4">
+            <div className="text-center flex-1">
+              <h1 className="text-4xl font-bold text-primary-foreground mb-3">
+                Wellness Tracker
+              </h1>
+              <p className="text-primary-foreground/90 text-lg">
+                Track your health journey with care
+              </p>
+            </div>
+            <Button
+              onClick={signOut}
+              variant="ghost"
+              size="icon"
+              className="text-primary-foreground hover:bg-primary-foreground/20"
+            >
+              <LogOut className="h-5 w-5" />
+            </Button>
+          </div>
         </div>
       </header>
 

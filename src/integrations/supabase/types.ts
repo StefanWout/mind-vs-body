@@ -14,7 +14,96 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      daily_entries: {
+        Row: {
+          created_at: string
+          date: string
+          got_up_to_pee: boolean | null
+          had_headache: boolean | null
+          headache_time: string | null
+          id: string
+          mood_evening: number | null
+          mood_midday: number | null
+          mood_morning: number | null
+          nausea: boolean | null
+          nausea_time: string | null
+          period_status: string | null
+          poop_consistency: string | null
+          poop_quantity: number | null
+          sleep_quality: number | null
+          took_medication: boolean | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          date: string
+          got_up_to_pee?: boolean | null
+          had_headache?: boolean | null
+          headache_time?: string | null
+          id?: string
+          mood_evening?: number | null
+          mood_midday?: number | null
+          mood_morning?: number | null
+          nausea?: boolean | null
+          nausea_time?: string | null
+          period_status?: string | null
+          poop_consistency?: string | null
+          poop_quantity?: number | null
+          sleep_quality?: number | null
+          took_medication?: boolean | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          got_up_to_pee?: boolean | null
+          had_headache?: boolean | null
+          headache_time?: string | null
+          id?: string
+          mood_evening?: number | null
+          mood_midday?: number | null
+          mood_morning?: number | null
+          nausea?: boolean | null
+          nausea_time?: string | null
+          period_status?: string | null
+          poop_consistency?: string | null
+          poop_quantity?: number | null
+          sleep_quality?: number | null
+          took_medication?: boolean | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          id: string
+          updated_at: string
+          user_id: string
+          username: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          id?: string
+          updated_at?: string
+          user_id: string
+          username?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          id?: string
+          updated_at?: string
+          user_id?: string
+          username?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

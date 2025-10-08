@@ -1,6 +1,8 @@
-import { useMemo } from 'react';
+import { useMemo, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { storage } from '@/lib/storage';
+import { useAuth } from '@/hooks/useAuth';
+import { DailyEntry } from '@/types/tracking';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { ArrowLeft, TrendingUp, Activity } from 'lucide-react';
@@ -8,7 +10,19 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 
 export default function Trends() {
   const navigate = useNavigate();
-  const entries = storage.getEntries();
+  const { user, loading } = useAuth();
+  const [entries, setEntries] = useState<DailyEntry[]>([]);
+
+  useEffect(() => {
+    if (!loading && user) {
+      loadEntries();
+    }
+  }, [loading, user]);
+
+  const loadEntries = async () => {
+    const allEntries = await storage.getEntries();
+    setEntries(allEntries);
+  };
 
   const moodData = useMemo(() => {
     return entries
@@ -45,6 +59,10 @@ export default function Trends() {
       .filter((m): m is number => m !== null);
     return moods.length > 0 ? (moods.reduce((a, b) => a + b, 0) / moods.length).toFixed(1) : 'N/A';
   }, [entries]);
+
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-soft pb-24">

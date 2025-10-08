@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DailyEntry, PeriodStatus, PoopConsistency } from '@/types/tracking';
 import { storage } from '@/lib/storage';
+import { useAuth } from '@/hooks/useAuth';
 import { ScaleInput } from '@/components/ScaleInput';
 import { ToggleInput } from '@/components/ToggleInput';
 import { PeriodStatusSelect } from '@/components/PeriodStatusSelect';
@@ -15,6 +16,7 @@ import { ArrowLeft, Save } from 'lucide-react';
 
 export default function DailyLog() {
   const navigate = useNavigate();
+  const { user, loading } = useAuth();
   const today = new Date().toISOString().split('T')[0];
   
   const [entry, setEntry] = useState<Partial<DailyEntry>>({
@@ -35,13 +37,19 @@ export default function DailyLog() {
   });
 
   useEffect(() => {
-    const existingEntry = storage.getEntryByDate(today);
+    if (!loading && user) {
+      loadEntry();
+    }
+  }, [loading, user, today]);
+
+  const loadEntry = async () => {
+    const existingEntry = await storage.getEntryByDate(today);
     if (existingEntry) {
       setEntry(existingEntry);
     }
-  }, [today]);
+  };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const completeEntry: DailyEntry = {
       id: entry.id || `entry-${Date.now()}`,
       date: today,
@@ -62,10 +70,18 @@ export default function DailyLog() {
       updatedAt: new Date().toISOString(),
     };
 
-    storage.saveEntry(completeEntry);
-    toast.success('Entry saved successfully!');
-    navigate('/');
+    try {
+      await storage.saveEntry(completeEntry);
+      toast.success('Entry saved successfully!');
+      navigate('/');
+    } catch (error) {
+      toast.error('Failed to save entry');
+    }
   };
+
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-soft pb-24">
