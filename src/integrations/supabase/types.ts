@@ -27,6 +27,7 @@ export type Database = {
           mood_morning: number | null
           nausea: boolean | null
           nausea_time: string | null
+          pee_time: string | null
           period_status: string | null
           poop_consistency: string | null
           poop_quantity: number | null
@@ -47,6 +48,7 @@ export type Database = {
           mood_morning?: number | null
           nausea?: boolean | null
           nausea_time?: string | null
+          pee_time?: string | null
           period_status?: string | null
           poop_consistency?: string | null
           poop_quantity?: number | null
@@ -67,6 +69,7 @@ export type Database = {
           mood_morning?: number | null
           nausea?: boolean | null
           nausea_time?: string | null
+          pee_time?: string | null
           period_status?: string | null
           poop_consistency?: string | null
           poop_quantity?: number | null

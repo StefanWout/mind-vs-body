@@ -14,6 +14,7 @@ export interface DailyEntry {
   poopConsistency: PoopConsistency | null;
   sleepQuality: number | null; // 1-5
   gotUpToPee: boolean | null;
+  peeTime: string | null; // HH:mm format
   hadHeadache: boolean | null;
   headacheTime: string | null; // HH:mm format
   tookMedication: boolean | null;

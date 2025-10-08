@@ -36,6 +36,7 @@ export default function DailyLog() {
     poopConsistency: null,
     sleepQuality: null,
     gotUpToPee: null,
+    peeTime: null,
     hadHeadache: null,
     headacheTime: null,
     tookMedication: null,
@@ -66,6 +67,7 @@ export default function DailyLog() {
         poopConsistency: null,
         sleepQuality: null,
         gotUpToPee: null,
+        peeTime: null,
         hadHeadache: null,
         headacheTime: null,
         tookMedication: null,
@@ -88,6 +90,7 @@ export default function DailyLog() {
       poopConsistency: entry.poopConsistency || null,
       sleepQuality: entry.sleepQuality || null,
       gotUpToPee: entry.gotUpToPee || null,
+      peeTime: entry.peeTime || null,
       hadHeadache: entry.hadHeadache || null,
       headacheTime: entry.headacheTime || null,
       tookMedication: entry.tookMedication || null,
@@ -191,6 +194,14 @@ export default function DailyLog() {
             onChange={(value) => setEntry({ ...entry, gotUpToPee: value })}
             label="Got Up to Pee?"
           />
+
+          {entry.gotUpToPee && (
+            <TimeInput
+              value={entry.peeTime || null}
+              onChange={(value) => setEntry({ ...entry, peeTime: value })}
+              label="What time did you get up to pee?"
+            />
+          )}
         </Card>
 
         <Card className="p-6 space-y-6 shadow-card border-border">

@@ -27,6 +27,7 @@ export const storage = {
         poopConsistency: entry.poop_consistency as any,
         sleepQuality: entry.sleep_quality,
         gotUpToPee: entry.got_up_to_pee,
+        peeTime: entry.pee_time,
         hadHeadache: entry.had_headache,
         headacheTime: entry.headache_time,
         tookMedication: entry.took_medication,
@@ -57,6 +58,7 @@ export const storage = {
         poop_consistency: entry.poopConsistency,
         sleep_quality: entry.sleepQuality,
         got_up_to_pee: entry.gotUpToPee,
+        pee_time: entry.peeTime,
         had_headache: entry.hadHeadache,
         headache_time: entry.headacheTime,
         took_medication: entry.tookMedication
@@ -101,6 +103,7 @@ export const storage = {
         poopConsistency: data.poop_consistency as any,
         sleepQuality: data.sleep_quality,
         gotUpToPee: data.got_up_to_pee,
+        peeTime: data.pee_time,
         hadHeadache: data.had_headache,
         headacheTime: data.headache_time,
         tookMedication: data.took_medication,
