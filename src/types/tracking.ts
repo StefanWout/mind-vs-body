@@ -1,4 +1,5 @@
 export type PeriodStatus = 'heavy' | 'light' | 'patchy' | 'cramps' | 'none';
+export type PoopConsistency = 'liquid' | 'soft' | 'solid';
 
 export interface DailyEntry {
   id: string;
@@ -9,6 +10,12 @@ export interface DailyEntry {
   moodMorning: number | null; // 1-5
   moodMidday: number | null; // 1-5
   moodEvening: number | null; // 1-5
+  poopQuantity: number | null;
+  poopConsistency: PoopConsistency | null;
+  sleepQuality: number | null; // 1-5
+  gotUpToPee: boolean | null;
+  hadHeadache: boolean | null;
+  headacheTime: string | null; // HH:mm format
   createdAt: string;
   updatedAt: string;
 }

@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { DailyEntry, PeriodStatus } from '@/types/tracking';
+import { DailyEntry, PeriodStatus, PoopConsistency } from '@/types/tracking';
 import { storage } from '@/lib/storage';
 import { ScaleInput } from '@/components/ScaleInput';
 import { ToggleInput } from '@/components/ToggleInput';
 import { PeriodStatusSelect } from '@/components/PeriodStatusSelect';
+import { PoopConsistencySelect } from '@/components/PoopConsistencySelect';
+import { NumberInput } from '@/components/NumberInput';
 import { TimeInput } from '@/components/TimeInput';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -23,6 +25,12 @@ export default function DailyLog() {
     moodMorning: null,
     moodMidday: null,
     moodEvening: null,
+    poopQuantity: null,
+    poopConsistency: null,
+    sleepQuality: null,
+    gotUpToPee: null,
+    hadHeadache: null,
+    headacheTime: null,
   });
 
   useEffect(() => {
@@ -42,6 +50,12 @@ export default function DailyLog() {
       moodMorning: entry.moodMorning || null,
       moodMidday: entry.moodMidday || null,
       moodEvening: entry.moodEvening || null,
+      poopQuantity: entry.poopQuantity || null,
+      poopConsistency: entry.poopConsistency || null,
+      sleepQuality: entry.sleepQuality || null,
+      gotUpToPee: entry.gotUpToPee || null,
+      hadHeadache: entry.hadHeadache || null,
+      headacheTime: entry.headacheTime || null,
       createdAt: entry.createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
@@ -95,6 +109,58 @@ export default function DailyLog() {
               value={entry.nauseaTime || null}
               onChange={(value) => setEntry({ ...entry, nauseaTime: value })}
               label="What time did nausea start?"
+            />
+          )}
+        </Card>
+
+        <Card className="p-6 space-y-6 shadow-card border-border">
+          <h2 className="text-lg font-semibold text-foreground">Digestive Health</h2>
+          
+          <NumberInput
+            value={entry.poopQuantity || null}
+            onChange={(value) => setEntry({ ...entry, poopQuantity: value })}
+            label="Number of Poops"
+            min={0}
+            max={20}
+          />
+
+          <PoopConsistencySelect
+            value={entry.poopConsistency || null}
+            onChange={(value) => setEntry({ ...entry, poopConsistency: value })}
+            label="Poop Consistency"
+          />
+        </Card>
+
+        <Card className="p-6 space-y-6 shadow-card border-border">
+          <h2 className="text-lg font-semibold text-foreground">Sleep & Nighttime</h2>
+          
+          <ScaleInput
+            value={entry.sleepQuality || null}
+            onChange={(value) => setEntry({ ...entry, sleepQuality: value })}
+            label="Sleep Quality"
+          />
+
+          <ToggleInput
+            value={entry.gotUpToPee || null}
+            onChange={(value) => setEntry({ ...entry, gotUpToPee: value })}
+            label="Got Up to Pee?"
+          />
+        </Card>
+
+        <Card className="p-6 space-y-6 shadow-card border-border">
+          <h2 className="text-lg font-semibold text-foreground">Pain & Discomfort</h2>
+          
+          <ToggleInput
+            value={entry.hadHeadache || null}
+            onChange={(value) => setEntry({ ...entry, hadHeadache: value })}
+            label="Had a Headache?"
+          />
+
+          {entry.hadHeadache && (
+            <TimeInput
+              value={entry.headacheTime || null}
+              onChange={(value) => setEntry({ ...entry, headacheTime: value })}
+              label="What time did headache start?"
             />
           )}
         </Card>
