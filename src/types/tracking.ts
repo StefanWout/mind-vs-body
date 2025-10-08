@@ -16,6 +16,7 @@ export interface DailyEntry {
   gotUpToPee: boolean | null;
   hadHeadache: boolean | null;
   headacheTime: string | null; // HH:mm format
+  tookMedication: boolean | null;
   createdAt: string;
   updatedAt: string;
 }

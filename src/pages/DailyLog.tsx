@@ -31,6 +31,7 @@ export default function DailyLog() {
     gotUpToPee: null,
     hadHeadache: null,
     headacheTime: null,
+    tookMedication: null,
   });
 
   useEffect(() => {
@@ -56,6 +57,7 @@ export default function DailyLog() {
       gotUpToPee: entry.gotUpToPee || null,
       hadHeadache: entry.hadHeadache || null,
       headacheTime: entry.headacheTime || null,
+      tookMedication: entry.tookMedication || null,
       createdAt: entry.createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
@@ -163,6 +165,12 @@ export default function DailyLog() {
               label="What time did headache start?"
             />
           )}
+
+          <ToggleInput
+            value={entry.tookMedication || null}
+            onChange={(value) => setEntry({ ...entry, tookMedication: value })}
+            label="Remembered to Take Medications?"
+          />
         </Card>
 
         <Card className="p-6 space-y-6 shadow-card border-border">
