@@ -38,6 +38,7 @@ export type Database = {
           took_medication: boolean | null
           updated_at: string
           user_id: string
+          went_to_office: boolean | null
         }
         Insert: {
           afternoon_productivity?: number | null
@@ -62,6 +63,7 @@ export type Database = {
           took_medication?: boolean | null
           updated_at?: string
           user_id: string
+          went_to_office?: boolean | null
         }
         Update: {
           afternoon_productivity?: number | null
@@ -86,6 +88,7 @@ export type Database = {
           took_medication?: boolean | null
           updated_at?: string
           user_id?: string
+          went_to_office?: boolean | null
         }
         Relationships: []
       }

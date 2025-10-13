@@ -33,6 +33,7 @@ export const storage = {
         hadHeadache: entry.had_headache,
         headacheTime: entry.headache_time,
         tookMedication: entry.took_medication,
+        wentToOffice: entry.went_to_office,
         notes: entry.notes,
         createdAt: entry.created_at,
         updatedAt: entry.updated_at
@@ -67,6 +68,7 @@ export const storage = {
         had_headache: entry.hadHeadache,
         headache_time: entry.headacheTime,
         took_medication: entry.tookMedication,
+        went_to_office: entry.wentToOffice,
         notes: entry.notes
       };
 
@@ -115,6 +117,7 @@ export const storage = {
         hadHeadache: data.had_headache,
         headacheTime: data.headache_time,
         tookMedication: data.took_medication,
+        wentToOffice: data.went_to_office,
         notes: data.notes,
         createdAt: data.created_at,
         updatedAt: data.updated_at

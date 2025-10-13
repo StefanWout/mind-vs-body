@@ -47,6 +47,7 @@ export default function DailyLog() {
     hadHeadache: null,
     headacheTime: null,
     tookMedication: null,
+    wentToOffice: null,
     notes: null,
   });
 
@@ -81,6 +82,7 @@ export default function DailyLog() {
         hadHeadache: null,
         headacheTime: null,
         tookMedication: null,
+        wentToOffice: null,
         notes: null,
       });
     }
@@ -107,6 +109,7 @@ export default function DailyLog() {
       hadHeadache: entry.hadHeadache || null,
       headacheTime: entry.headacheTime || null,
       tookMedication: entry.tookMedication || null,
+      wentToOffice: entry.wentToOffice || null,
       notes: entry.notes || null,
       createdAt: entry.createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -253,6 +256,16 @@ export default function DailyLog() {
             value={entry.tookMedication || null}
             onChange={(value) => setEntry({ ...entry, tookMedication: value })}
             label="Remembered to Take Medications?"
+          />
+        </Card>
+
+        <Card className="p-6 space-y-6 shadow-card border-border">
+          <h2 className="text-lg font-semibold text-foreground">Work</h2>
+          
+          <ToggleInput
+            value={entry.wentToOffice || null}
+            onChange={(value) => setEntry({ ...entry, wentToOffice: value })}
+            label="Did I Go Into the Office?"
           />
         </Card>
 
