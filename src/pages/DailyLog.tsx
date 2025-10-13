@@ -26,9 +26,13 @@ export default function DailyLog() {
   const dateParam = searchParams.get('date');
   const today = format(new Date(), 'yyyy-MM-dd');
   
-  const [selectedDate, setSelectedDate] = useState<Date>(
-    dateParam ? new Date(dateParam) : new Date()
-  );
+  const [selectedDate, setSelectedDate] = useState<Date>(() => {
+    if (dateParam) {
+      const [year, month, day] = dateParam.split('-').map(Number);
+      return new Date(year, month - 1, day);
+    }
+    return new Date();
+  });
   const [entry, setEntry] = useState<Partial<DailyEntry>>({
     date: today,
     periodStatus: null,
