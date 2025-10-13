@@ -172,14 +172,6 @@ export default function DailyLog() {
 
       <main className="max-w-md mx-auto px-4 py-6 space-y-6">
         <Card className="p-6 space-y-6 shadow-card border-border">
-          <PeriodStatusSelect
-            value={entry.periodStatus || null}
-            onChange={(value) => setEntry({ ...entry, periodStatus: value })}
-            label="Period Status"
-          />
-        </Card>
-
-        <Card className="p-6 space-y-6 shadow-card border-border">
           <h2 className="text-lg font-semibold text-foreground">Digestive Health</h2>
           
           <NumberInput
@@ -304,6 +296,14 @@ export default function DailyLog() {
             value={entry.afternoonProductivity || null}
             onChange={(value) => setEntry({ ...entry, afternoonProductivity: value })}
             label="Afternoon Productivity"
+          />
+        </Card>
+
+        <Card className="p-6 space-y-6 shadow-card border-border">
+          <PeriodStatusSelect
+            value={entry.periodStatus || null}
+            onChange={(value) => setEntry({ ...entry, periodStatus: value })}
+            label="Period Status"
           />
         </Card>
 
