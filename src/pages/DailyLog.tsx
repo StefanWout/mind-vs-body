@@ -24,7 +24,7 @@ export default function DailyLog() {
   const { user, loading } = useAuth();
   const [searchParams] = useSearchParams();
   const dateParam = searchParams.get('date');
-  const today = new Date().toISOString().split('T')[0];
+  const today = format(new Date(), 'yyyy-MM-dd');
   
   const [selectedDate, setSelectedDate] = useState<Date>(
     dateParam ? new Date(dateParam) : new Date()
@@ -58,7 +58,7 @@ export default function DailyLog() {
   }, [loading, user, selectedDate]);
 
   const loadEntry = async () => {
-    const dateString = selectedDate.toISOString().split('T')[0];
+    const dateString = format(selectedDate, 'yyyy-MM-dd');
     const existingEntry = await storage.getEntryByDate(dateString);
     if (existingEntry) {
       setEntry(existingEntry);
@@ -89,7 +89,7 @@ export default function DailyLog() {
   };
 
   const handleSave = async () => {
-    const dateString = selectedDate.toISOString().split('T')[0];
+    const dateString = format(selectedDate, 'yyyy-MM-dd');
     const completeEntry: DailyEntry = {
       id: entry.id || `entry-${Date.now()}`,
       date: dateString,
