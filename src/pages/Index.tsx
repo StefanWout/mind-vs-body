@@ -126,7 +126,7 @@ const Index = () => {
                 <div
                   key={entry.id}
                   className="flex items-center justify-between p-3 rounded-xl bg-muted/50 hover:bg-muted transition-smooth cursor-pointer"
-                  onClick={() => navigate('/log')}
+                  onClick={() => navigate(`/log?date=${entry.date}`)}
                 >
                   <div>
                     <p className="font-medium text-foreground">

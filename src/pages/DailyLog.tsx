@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { format } from 'date-fns';
 import { DailyEntry, PeriodStatus, PoopConsistency } from '@/types/tracking';
 import { storage } from '@/lib/storage';
@@ -22,9 +22,13 @@ import { cn } from '@/lib/utils';
 export default function DailyLog() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
+  const [searchParams] = useSearchParams();
+  const dateParam = searchParams.get('date');
   const today = new Date().toISOString().split('T')[0];
   
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date>(
+    dateParam ? new Date(dateParam) : new Date()
+  );
   const [entry, setEntry] = useState<Partial<DailyEntry>>({
     date: today,
     periodStatus: null,
