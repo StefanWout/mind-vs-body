@@ -5,7 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { DailyEntry } from '@/types/tracking';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { ArrowLeft, TrendingUp, Activity } from 'lucide-react';
+import { ArrowLeft, TrendingUp, Activity, Download } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 
 export default function Trends() {
@@ -60,6 +60,67 @@ export default function Trends() {
     return moods.length > 0 ? (moods.reduce((a, b) => a + b, 0) / moods.length).toFixed(1) : 'N/A';
   }, [entries]);
 
+  const downloadCSV = () => {
+    const headers = [
+      'Date',
+      'Period Status',
+      'Nausea',
+      'Nausea Time',
+      'Mood Morning',
+      'Mood Midday',
+      'Mood Evening',
+      'Morning Productivity',
+      'Afternoon Productivity',
+      'Poop Quantity',
+      'Poop Consistency',
+      'Sleep Quality',
+      'Got Up To Pee',
+      'Pee Time',
+      'Had Headache',
+      'Headache Time',
+      'Took Medication',
+      'Went To Office',
+      'Notes'
+    ];
+
+    const rows = entries.map(entry => [
+      entry.date,
+      entry.periodStatus || '',
+      entry.nausea ? 'Yes' : 'No',
+      entry.nauseaTime || '',
+      entry.moodMorning || '',
+      entry.moodMidday || '',
+      entry.moodEvening || '',
+      entry.morningProductivity || '',
+      entry.afternoonProductivity || '',
+      entry.poopQuantity || '',
+      entry.poopConsistency || '',
+      entry.sleepQuality || '',
+      entry.gotUpToPee ? 'Yes' : 'No',
+      entry.peeTime || '',
+      entry.hadHeadache ? 'Yes' : 'No',
+      entry.headacheTime || '',
+      entry.tookMedication ? 'Yes' : 'No',
+      entry.wentToOffice ? 'Yes' : 'No',
+      entry.notes ? `"${entry.notes.replace(/"/g, '""')}"` : ''
+    ]);
+
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.join(','))
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `wellness-tracker-data-${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   }
@@ -67,19 +128,30 @@ export default function Trends() {
   return (
     <div className="min-h-screen bg-gradient-soft pb-24">
       <header className="sticky top-0 z-10 bg-card/80 backdrop-blur-lg border-b border-border">
-        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center gap-3">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => navigate('/')}
-            className="rounded-full"
-          >
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <div>
-            <h1 className="text-xl font-bold text-foreground">Trends & Insights</h1>
-            <p className="text-sm text-muted-foreground">Last 14 days</p>
+        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => navigate('/')}
+              className="rounded-full"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+            <div>
+              <h1 className="text-xl font-bold text-foreground">Trends & Insights</h1>
+              <p className="text-sm text-muted-foreground">Last 14 days</p>
+            </div>
           </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={downloadCSV}
+            className="gap-2"
+          >
+            <Download className="h-4 w-4" />
+            Export CSV
+          </Button>
         </div>
       </header>
 
