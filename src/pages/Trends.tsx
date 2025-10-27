@@ -5,13 +5,45 @@ import { useAuth } from '@/hooks/useAuth';
 import { DailyEntry } from '@/types/tracking';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import { ArrowLeft, TrendingUp, Activity, Download } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
+
+type DateRange = 'week' | 'month' | 'all';
+
+interface MetricOverlay {
+  id: string;
+  label: string;
+  dataKey: string;
+  color: string;
+  strokeDasharray?: string;
+}
 
 export default function Trends() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   const [entries, setEntries] = useState<DailyEntry[]>([]);
+  const [dateRange, setDateRange] = useState<DateRange>('month');
+  const [activeOverlays, setActiveOverlays] = useState<Set<string>>(new Set());
+
+  const overlayMetrics: MetricOverlay[] = [
+    { id: 'morningProd', label: 'Morning Productivity', dataKey: 'morningProductivity', color: 'hsl(var(--chart-1))', strokeDasharray: '5 5' },
+    { id: 'afternoonProd', label: 'Afternoon Productivity', dataKey: 'afternoonProductivity', color: 'hsl(var(--chart-2))', strokeDasharray: '3 3' },
+    { id: 'office', label: 'Office Attendance', dataKey: 'officeAttendance', color: 'hsl(var(--chart-3))', strokeDasharray: '8 2' },
+    { id: 'sleep', label: 'Sleep Quality', dataKey: 'sleepQuality', color: 'hsl(var(--chart-4))', strokeDasharray: '1 3' },
+  ];
+
+  const toggleOverlay = (id: string) => {
+    setActiveOverlays(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(id)) {
+        newSet.delete(id);
+      } else {
+        newSet.add(id);
+      }
+      return newSet;
+    });
+  };
 
   useEffect(() => {
     if (!loading && user) {
@@ -24,17 +56,30 @@ export default function Trends() {
     setEntries(allEntries);
   };
 
+  const daysToShow = useMemo(() => {
+    switch (dateRange) {
+      case 'week': return 7;
+      case 'month': return 30;
+      case 'all': return entries.length;
+      default: return 30;
+    }
+  }, [dateRange, entries.length]);
+
   const moodData = useMemo(() => {
     return entries
-      .slice(0, 14)
+      .slice(0, daysToShow)
       .reverse()
       .map(entry => ({
-        date: new Date(entry.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-        morning: entry.moodMorning || 0,
-        midday: entry.moodMidday || 0,
-        evening: entry.moodEvening || 0,
+        date: new Date(entry.date).toLocaleDateString('en-GB', { month: 'short', day: 'numeric' }),
+        morning: entry.moodMorning || null,
+        midday: entry.moodMidday || null,
+        evening: entry.moodEvening || null,
+        morningProductivity: entry.morningProductivity || null,
+        afternoonProductivity: entry.afternoonProductivity || null,
+        officeAttendance: entry.wentToOffice ? 1 : 0,
+        sleepQuality: entry.sleepQuality || null,
       }));
-  }, [entries]);
+  }, [entries, daysToShow]);
 
   const periodData = useMemo(() => {
     const statusMap = { heavy: 4, light: 2, patchy: 3, cramps: 1, none: 0 };
@@ -54,11 +99,11 @@ export default function Trends() {
 
   const avgMood = useMemo(() => {
     const moods = entries
-      .slice(0, 14)
+      .slice(0, daysToShow)
       .flatMap(e => [e.moodMorning, e.moodMidday, e.moodEvening])
       .filter((m): m is number => m !== null);
     return moods.length > 0 ? (moods.reduce((a, b) => a + b, 0) / moods.length).toFixed(1) : 'N/A';
-  }, [entries]);
+  }, [entries, daysToShow]);
 
   const downloadCSV = () => {
     const headers = [
@@ -144,7 +189,9 @@ export default function Trends() {
             </Button>
             <div>
               <h1 className="text-xl font-bold text-foreground">Trends & Insights</h1>
-              <p className="text-sm text-muted-foreground">Last 14 days</p>
+              <p className="text-sm text-muted-foreground">
+                {dateRange === 'week' ? 'Last 7 days' : dateRange === 'month' ? 'Last 30 days' : `All ${entries.length} days`}
+              </p>
             </div>
           </div>
           <Button
@@ -179,8 +226,55 @@ export default function Trends() {
         </div>
 
         <Card className="p-6 shadow-card border-border">
-          <h2 className="text-lg font-semibold text-foreground mb-4">Mood Trends</h2>
-          <ResponsiveContainer width="100%" height={250}>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold text-foreground">Mood & Correlations</h2>
+            <div className="flex gap-2">
+              <Button
+                variant={dateRange === 'week' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setDateRange('week')}
+              >
+                Week
+              </Button>
+              <Button
+                variant={dateRange === 'month' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setDateRange('month')}
+              >
+                Month
+              </Button>
+              <Button
+                variant={dateRange === 'all' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setDateRange('all')}
+              >
+                All
+              </Button>
+            </div>
+          </div>
+
+          <div className="mb-4 p-3 bg-muted/30 rounded-lg">
+            <p className="text-sm font-medium text-foreground mb-2">Overlay Filters:</p>
+            <div className="grid grid-cols-2 gap-3">
+              {overlayMetrics.map(metric => (
+                <div key={metric.id} className="flex items-center space-x-2">
+                  <Checkbox
+                    id={metric.id}
+                    checked={activeOverlays.has(metric.id)}
+                    onCheckedChange={() => toggleOverlay(metric.id)}
+                  />
+                  <label
+                    htmlFor={metric.id}
+                    className="text-sm text-muted-foreground cursor-pointer"
+                  >
+                    {metric.label}
+                  </label>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <ResponsiveContainer width="100%" height={300}>
             <LineChart data={moodData}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
               <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" style={{ fontSize: '12px' }} />
@@ -192,23 +286,86 @@ export default function Trends() {
                   borderRadius: '12px',
                 }}
               />
-              <Line type="monotone" dataKey="morning" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ r: 4 }} />
-              <Line type="monotone" dataKey="midday" stroke="hsl(var(--secondary))" strokeWidth={2} dot={{ r: 4 }} />
-              <Line type="monotone" dataKey="evening" stroke="hsl(var(--accent))" strokeWidth={2} dot={{ r: 4 }} />
+              {/* Mood lines - always visible */}
+              <Line 
+                type="monotone" 
+                dataKey="morning" 
+                stroke="hsl(var(--primary))" 
+                strokeWidth={2} 
+                dot={{ r: 3 }} 
+                name="Mood: Morning"
+                connectNulls
+              />
+              <Line 
+                type="monotone" 
+                dataKey="midday" 
+                stroke="hsl(var(--secondary))" 
+                strokeWidth={2} 
+                dot={{ r: 3 }} 
+                name="Mood: Midday"
+                connectNulls
+              />
+              <Line 
+                type="monotone" 
+                dataKey="evening" 
+                stroke="hsl(var(--accent))" 
+                strokeWidth={2} 
+                dot={{ r: 3 }} 
+                name="Mood: Evening"
+                connectNulls
+              />
+              {/* Overlay lines - conditional */}
+              {overlayMetrics.map(metric => 
+                activeOverlays.has(metric.id) && (
+                  <Line
+                    key={metric.id}
+                    type="monotone"
+                    dataKey={metric.dataKey}
+                    stroke={metric.color}
+                    strokeWidth={2}
+                    strokeDasharray={metric.strokeDasharray}
+                    dot={{ r: 3 }}
+                    name={metric.label}
+                    connectNulls
+                  />
+                )
+              )}
             </LineChart>
           </ResponsiveContainer>
-          <div className="flex justify-center gap-6 mt-4 text-sm">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-primary" />
-              <span className="text-muted-foreground">Morning</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-secondary" />
-              <span className="text-muted-foreground">Midday</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-accent" />
-              <span className="text-muted-foreground">Evening</span>
+
+          <div className="mt-4 border-t border-border pt-4">
+            <p className="text-xs font-medium text-muted-foreground mb-2">Legend:</p>
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-0.5 bg-primary" />
+                <span className="text-muted-foreground">Mood: Morning</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-0.5 bg-secondary" />
+                <span className="text-muted-foreground">Mood: Midday</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-0.5 bg-accent" />
+                <span className="text-muted-foreground">Mood: Evening</span>
+              </div>
+              {overlayMetrics.map(metric => 
+                activeOverlays.has(metric.id) && (
+                  <div key={metric.id} className="flex items-center gap-2">
+                    <svg width="24" height="2" className="flex-shrink-0">
+                      <line
+                        x1="0"
+                        y1="1"
+                        x2="24"
+                        y2="1"
+                        stroke={metric.color}
+                        strokeWidth="2"
+                        strokeDasharray={metric.strokeDasharray}
+                      />
+                    </svg>
+                    <span className="text-muted-foreground">{metric.label}</span>
+                  </div>
+                )
+              )}
             </div>
           </div>
         </Card>
@@ -242,8 +399,9 @@ export default function Trends() {
         <Card className="p-6 shadow-card border-border bg-accent-light/30">
           <h3 className="font-semibold text-foreground mb-3">📊 Insights</h3>
           <ul className="space-y-2 text-sm text-muted-foreground">
-            <li>• Your mood tends to be most stable in the {avgMood === 'N/A' ? 'start tracking to see patterns' : 'mornings'}</li>
-            <li>• Nausea occurred on {nauseaCount} days in the last 2 weeks</li>
+            <li>• Your average mood is {avgMood} across all tracked periods</li>
+            <li>• Nausea occurred on {nauseaCount} days in the selected range</li>
+            <li>• Toggle overlay filters above to see how mood correlates with sleep, productivity, and office attendance</li>
             <li>• Consider tracking for at least 30 days to see meaningful patterns</li>
           </ul>
         </Card>
