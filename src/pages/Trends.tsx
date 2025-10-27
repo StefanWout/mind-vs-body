@@ -85,6 +85,11 @@ export default function Trends() {
           headacheTime: entry.headacheTime,
           medication: entry.tookMedication,
           avgMood,
+          sleepQuality: entry.sleepQuality,
+          periodStatus: entry.periodStatus,
+          wentToOffice: entry.wentToOffice,
+          wentToGym: entry.wentToGym,
+          gymIntensity: entry.gymIntensity,
         };
       });
   }, [entries, offset]);
@@ -417,6 +422,10 @@ export default function Trends() {
                 <tr className="border-b border-border">
                   <th className="text-left py-3 px-2 text-sm font-semibold text-foreground">Date</th>
                   <th className="text-left py-3 px-2 text-sm font-semibold text-foreground">Mood</th>
+                  <th className="text-center py-3 px-2 text-sm font-semibold text-foreground">Sleep</th>
+                  <th className="text-center py-3 px-2 text-sm font-semibold text-foreground">Period</th>
+                  <th className="text-center py-3 px-2 text-sm font-semibold text-foreground">Work</th>
+                  <th className="text-center py-3 px-2 text-sm font-semibold text-foreground">Exercise</th>
                   <th className="text-center py-3 px-2 text-sm font-semibold text-foreground">
                     <div className="flex items-center justify-center gap-1.5">
                       <div className="w-3 h-3 rounded-full bg-green-500" />
@@ -464,6 +473,28 @@ export default function Trends() {
                         ) : (
                           <span className="text-xs text-muted-foreground italic">N/A</span>
                         )}
+                      </td>
+                      <td className="py-3 px-2 text-center">
+                        <span className="text-xs text-muted-foreground">
+                          {day.sleepQuality ? `${day.sleepQuality}/5` : '—'}
+                        </span>
+                      </td>
+                      <td className="py-3 px-2 text-center">
+                        <span className="text-xs text-muted-foreground capitalize">
+                          {day.periodStatus || '—'}
+                        </span>
+                      </td>
+                      <td className="py-3 px-2 text-center">
+                        <span className="text-xs text-muted-foreground">
+                          {day.wentToOffice ? 'Yes' : '—'}
+                        </span>
+                      </td>
+                      <td className="py-3 px-2 text-center">
+                        <span className="text-xs text-muted-foreground">
+                          {day.wentToGym 
+                            ? `Yes${day.gymIntensity ? ` (${day.gymIntensity}/5)` : ''}`
+                            : '—'}
+                        </span>
                       </td>
                       <td className="py-3 px-2 text-center">
                         {day.nausea ? (
