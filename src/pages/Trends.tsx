@@ -424,7 +424,7 @@ export default function Trends() {
                   <th className="text-left py-3 px-2 text-sm font-semibold text-foreground">Mood</th>
                   <th className="text-center py-3 px-2 text-sm font-semibold text-foreground">Sleep</th>
                   <th className="text-center py-3 px-2 text-sm font-semibold text-foreground">Period</th>
-                  <th className="text-center py-3 px-2 text-sm font-semibold text-foreground">Work</th>
+                  <th className="text-center py-3 px-2 text-sm font-semibold text-foreground">Office</th>
                   <th className="text-center py-3 px-2 text-sm font-semibold text-foreground">Exercise</th>
                   <th className="text-center py-3 px-2 text-sm font-semibold text-foreground">
                     <div className="flex items-center justify-center gap-1.5">
