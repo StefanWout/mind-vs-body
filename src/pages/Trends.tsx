@@ -47,6 +47,28 @@ export default function Trends() {
       }));
   }, [entries]);
 
+  const productivityData = useMemo(() => {
+    return entries
+      .slice(0, 14)
+      .reverse()
+      .map(entry => ({
+        date: new Date(entry.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+        morning: entry.morningProductivity || 0,
+        afternoon: entry.afternoonProductivity || 0,
+      }));
+  }, [entries]);
+
+  const sleepData = useMemo(() => {
+    return entries
+      .slice(0, 14)
+      .reverse()
+      .map(entry => ({
+        date: new Date(entry.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+        quality: entry.sleepQuality || 0,
+        pee: entry.gotUpToPee,
+      }));
+  }, [entries]);
+
   const nauseaCount = useMemo(() => {
     const last14 = entries.slice(0, 14);
     return last14.filter(e => e.nausea === true).length;
@@ -236,6 +258,83 @@ export default function Trends() {
             <span>2 = Light</span>
             <span>3 = Patchy</span>
             <span>4 = Heavy</span>
+          </div>
+        </Card>
+
+        <Card className="p-6 shadow-card border-border">
+          <h2 className="text-lg font-semibold text-foreground mb-4">Productivity Levels</h2>
+          <ResponsiveContainer width="100%" height={250}>
+            <LineChart data={productivityData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+              <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" style={{ fontSize: '12px' }} />
+              <YAxis stroke="hsl(var(--muted-foreground))" domain={[0, 5]} />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: 'hsl(var(--card))',
+                  border: '1px solid hsl(var(--border))',
+                  borderRadius: '12px',
+                }}
+              />
+              <Line type="monotone" dataKey="morning" stroke="hsl(var(--chart-1))" strokeWidth={2} dot={{ r: 4 }} />
+              <Line type="monotone" dataKey="afternoon" stroke="hsl(var(--chart-2))" strokeWidth={2} dot={{ r: 4 }} />
+            </LineChart>
+          </ResponsiveContainer>
+          <div className="flex justify-center gap-6 mt-4 text-sm">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-chart-1" />
+              <span className="text-muted-foreground">Morning</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-chart-2" />
+              <span className="text-muted-foreground">Afternoon</span>
+            </div>
+          </div>
+        </Card>
+
+        <Card className="p-6 shadow-card border-border">
+          <h2 className="text-lg font-semibold text-foreground mb-4">Sleep Quality</h2>
+          <ResponsiveContainer width="100%" height={250}>
+            <LineChart data={sleepData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+              <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" style={{ fontSize: '12px' }} />
+              <YAxis stroke="hsl(var(--muted-foreground))" domain={[0, 5]} />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: 'hsl(var(--card))',
+                  border: '1px solid hsl(var(--border))',
+                  borderRadius: '12px',
+                }}
+              />
+              <Line 
+                type="monotone" 
+                dataKey="quality" 
+                stroke="hsl(var(--chart-3))" 
+                strokeWidth={2} 
+                dot={(props) => {
+                  const { cx, cy, payload } = props;
+                  return (
+                    <circle
+                      cx={cx}
+                      cy={cy}
+                      r={5}
+                      fill={payload.pee ? 'hsl(var(--chart-5))' : 'hsl(var(--chart-3))'}
+                      stroke={payload.pee ? 'hsl(var(--chart-5))' : 'hsl(var(--chart-3))'}
+                      strokeWidth={2}
+                    />
+                  );
+                }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+          <div className="flex justify-center gap-6 mt-4 text-sm">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-chart-3" />
+              <span className="text-muted-foreground">Normal night</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-chart-5" />
+              <span className="text-muted-foreground">Got up to pee</span>
+            </div>
           </div>
         </Card>
 
