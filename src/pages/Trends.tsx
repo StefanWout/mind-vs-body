@@ -419,10 +419,10 @@ export default function Trends() {
                   moodEmoji = day.nausea ? '😢🤢' : '😢';
                 } else if (day.avgMood <= 3) {
                   moodEmoji = day.nausea ? '😐🤢' : '😐';
-                } else if (day.avgMood <= 4) {
+                } else if (day.avgMood < 4) {
                   moodEmoji = day.nausea ? '🙂🤢' : '🙂';
                 } else {
-                  moodEmoji = '🤩';
+                  moodEmoji = day.nausea ? '🤩🤢' : '🤩';
                 }
               }
               
