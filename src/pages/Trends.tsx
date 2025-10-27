@@ -308,7 +308,7 @@ export default function Trends() {
               <Line 
                 type="monotone" 
                 dataKey="quality" 
-                stroke="hsl(var(--chart-3))" 
+                stroke="hsl(var(--primary))" 
                 strokeWidth={2} 
                 dot={(props) => {
                   const { cx, cy, payload } = props;
@@ -317,8 +317,8 @@ export default function Trends() {
                       cx={cx}
                       cy={cy}
                       r={5}
-                      fill={payload.pee ? 'hsl(var(--chart-5))' : 'hsl(var(--chart-3))'}
-                      stroke={payload.pee ? 'hsl(var(--chart-5))' : 'hsl(var(--chart-3))'}
+                      fill={payload.pee ? 'hsl(var(--destructive))' : 'hsl(var(--primary))'}
+                      stroke={payload.pee ? 'hsl(var(--destructive))' : 'hsl(var(--primary))'}
                       strokeWidth={2}
                     />
                   );
@@ -328,11 +328,11 @@ export default function Trends() {
           </ResponsiveContainer>
           <div className="flex justify-center gap-6 mt-4 text-sm">
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-chart-3" />
+              <div className="w-3 h-3 rounded-full bg-primary" />
               <span className="text-muted-foreground">Normal night</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-chart-5" />
+              <div className="w-3 h-3 rounded-full bg-destructive" />
               <span className="text-muted-foreground">Got up to pee</span>
             </div>
           </div>
