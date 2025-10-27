@@ -52,6 +52,8 @@ export default function DailyLog() {
     headacheTime: null,
     tookMedication: null,
     wentToOffice: null,
+    wentToGym: null,
+    gymIntensity: null,
     notes: null,
   });
 
@@ -87,6 +89,8 @@ export default function DailyLog() {
         headacheTime: null,
         tookMedication: null,
         wentToOffice: null,
+        wentToGym: null,
+        gymIntensity: null,
         notes: null,
       });
     }
@@ -114,6 +118,8 @@ export default function DailyLog() {
       headacheTime: entry.headacheTime || null,
       tookMedication: entry.tookMedication || null,
       wentToOffice: entry.wentToOffice || null,
+      wentToGym: entry.wentToGym || null,
+      gymIntensity: entry.gymIntensity || null,
       notes: entry.notes || null,
       createdAt: entry.createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -263,6 +269,24 @@ export default function DailyLog() {
             onChange={(value) => setEntry({ ...entry, wentToOffice: value })}
             label="Did I Go Into the Office?"
           />
+        </Card>
+
+        <Card className="p-6 space-y-6 shadow-card border-border">
+          <h2 className="text-lg font-semibold text-foreground">Exercise</h2>
+          
+          <ToggleInput
+            value={entry.wentToGym || null}
+            onChange={(value) => setEntry({ ...entry, wentToGym: value, gymIntensity: value ? entry.gymIntensity : null })}
+            label="Did I Go to the Gym?"
+          />
+
+          {entry.wentToGym && (
+            <ScaleInput
+              value={entry.gymIntensity || null}
+              onChange={(value) => setEntry({ ...entry, gymIntensity: value })}
+              label="Workout Intensity"
+            />
+          )}
         </Card>
 
         <Card className="p-6 space-y-6 shadow-card border-border">

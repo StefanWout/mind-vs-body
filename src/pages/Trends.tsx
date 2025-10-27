@@ -80,6 +80,8 @@ export default function Trends() {
       'Headache Time',
       'Took Medication',
       'Went To Office',
+      'Went To Gym',
+      'Gym Intensity',
       'Notes'
     ];
 
@@ -102,6 +104,8 @@ export default function Trends() {
       entry.headacheTime || '',
       entry.tookMedication ? 'Yes' : 'No',
       entry.wentToOffice ? 'Yes' : 'No',
+      entry.wentToGym ? 'Yes' : 'No',
+      entry.gymIntensity || '',
       entry.notes ? `"${entry.notes.replace(/"/g, '""')}"` : ''
     ]);
 

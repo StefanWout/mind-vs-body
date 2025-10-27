@@ -20,6 +20,7 @@ export type Database = {
           created_at: string
           date: string
           got_up_to_pee: boolean | null
+          gym_intensity: number | null
           had_headache: boolean | null
           headache_time: string | null
           id: string
@@ -38,6 +39,7 @@ export type Database = {
           took_medication: boolean | null
           updated_at: string
           user_id: string
+          went_to_gym: boolean | null
           went_to_office: boolean | null
         }
         Insert: {
@@ -45,6 +47,7 @@ export type Database = {
           created_at?: string
           date: string
           got_up_to_pee?: boolean | null
+          gym_intensity?: number | null
           had_headache?: boolean | null
           headache_time?: string | null
           id?: string
@@ -63,6 +66,7 @@ export type Database = {
           took_medication?: boolean | null
           updated_at?: string
           user_id: string
+          went_to_gym?: boolean | null
           went_to_office?: boolean | null
         }
         Update: {
@@ -70,6 +74,7 @@ export type Database = {
           created_at?: string
           date?: string
           got_up_to_pee?: boolean | null
+          gym_intensity?: number | null
           had_headache?: boolean | null
           headache_time?: string | null
           id?: string
@@ -88,6 +93,7 @@ export type Database = {
           took_medication?: boolean | null
           updated_at?: string
           user_id?: string
+          went_to_gym?: boolean | null
           went_to_office?: boolean | null
         }
         Relationships: []

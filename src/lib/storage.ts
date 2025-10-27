@@ -34,6 +34,8 @@ export const storage = {
         headacheTime: entry.headache_time,
         tookMedication: entry.took_medication,
         wentToOffice: entry.went_to_office,
+        wentToGym: entry.went_to_gym,
+        gymIntensity: entry.gym_intensity,
         notes: entry.notes,
         createdAt: entry.created_at,
         updatedAt: entry.updated_at
@@ -69,6 +71,8 @@ export const storage = {
         headache_time: entry.headacheTime,
         took_medication: entry.tookMedication,
         went_to_office: entry.wentToOffice,
+        went_to_gym: entry.wentToGym,
+        gym_intensity: entry.gymIntensity,
         notes: entry.notes
       };
 
@@ -118,6 +122,8 @@ export const storage = {
         headacheTime: data.headache_time,
         tookMedication: data.took_medication,
         wentToOffice: data.went_to_office,
+        wentToGym: data.went_to_gym,
+        gymIntensity: data.gym_intensity,
         notes: data.notes,
         createdAt: data.created_at,
         updatedAt: data.updated_at

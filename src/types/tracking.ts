@@ -21,6 +21,8 @@ export interface DailyEntry {
   headacheTime: string | null; // HH:mm format
   tookMedication: boolean | null;
   wentToOffice: boolean | null;
+  wentToGym: boolean | null;
+  gymIntensity: number | null; // 1-5
   notes: string | null;
   createdAt: string;
   updatedAt: string;
