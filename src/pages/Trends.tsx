@@ -92,6 +92,15 @@ export default function Trends() {
     return `${new Date(oldest).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })} - ${new Date(newest).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}`;
   }, [entries, offset]);
 
+  const statsDateRange = useMemo(() => {
+    const currentEntries = entries.slice(offset, offset + 7);
+    if (currentEntries.length === 0) return '';
+    const oldest = currentEntries[currentEntries.length - 1]?.date;
+    const newest = currentEntries[0]?.date;
+    if (!oldest || !newest) return '';
+    return `${new Date(oldest).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })} - ${new Date(newest).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}`;
+  }, [entries, offset]);
+
   const canGoNewer = offset > 0;
   const canGoOlder = offset + 14 < entries.length;
 
@@ -221,17 +230,23 @@ export default function Trends() {
       <main className="max-w-4xl mx-auto px-4 py-6 space-y-6">
         <div className="grid grid-cols-2 gap-4">
           <Card className="p-6 shadow-card border-border">
-            <div className="flex items-center gap-2 text-muted-foreground mb-2">
-              <Activity className="h-4 w-4" />
-              <span className="text-sm font-medium">Avg Mood (Last 7 Days)</span>
+            <div className="flex flex-col gap-1 mb-2">
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Activity className="h-4 w-4" />
+                <span className="text-sm font-medium">Avg Mood</span>
+              </div>
+              <span className="text-xs text-muted-foreground">{statsDateRange}</span>
             </div>
             <p className="text-3xl font-bold text-foreground">{avgMood}</p>
           </Card>
 
           <Card className="p-6 shadow-card border-border">
-            <div className="flex items-center gap-2 text-muted-foreground mb-2">
-              <TrendingUp className="h-4 w-4" />
-              <span className="text-sm font-medium">Nausea Days (Last 7 Days)</span>
+            <div className="flex flex-col gap-1 mb-2">
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <TrendingUp className="h-4 w-4" />
+                <span className="text-sm font-medium">Nausea Days</span>
+              </div>
+              <span className="text-xs text-muted-foreground">{statsDateRange}</span>
             </div>
             <p className="text-3xl font-bold text-foreground">{nauseaCount}</p>
           </Card>
