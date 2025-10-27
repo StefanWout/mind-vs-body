@@ -102,7 +102,7 @@ export default function Trends() {
   }, [entries, offset]);
 
   const canGoNewer = offset > 0;
-  const canGoOlder = offset + 14 < entries.length;
+  const canGoOlder = offset + 7 < entries.length;
 
   const downloadCSV = () => {
     const headers = [
@@ -206,7 +206,7 @@ export default function Trends() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setOffset(offset + 14)}
+              onClick={() => setOffset(offset + 7)}
               disabled={!canGoOlder}
               className="gap-1"
             >
@@ -216,7 +216,7 @@ export default function Trends() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setOffset(Math.max(0, offset - 14))}
+              onClick={() => setOffset(Math.max(0, offset - 7))}
               disabled={!canGoNewer}
               className="gap-1"
             >
