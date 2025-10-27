@@ -252,7 +252,7 @@ export default function Trends() {
                 }}
               />
               <Line type="monotone" dataKey="morning" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ r: 4 }} />
-              <Line type="monotone" dataKey="midday" stroke="hsl(var(--secondary))" strokeWidth={2} dot={{ r: 4 }} />
+              <Line type="monotone" dataKey="midday" stroke="hsl(var(--chart-orange))" strokeWidth={2} dot={{ r: 4 }} />
               <Line type="monotone" dataKey="evening" stroke="hsl(var(--accent))" strokeWidth={2} dot={{ r: 4 }} />
             </LineChart>
           </ResponsiveContainer>
@@ -262,7 +262,7 @@ export default function Trends() {
               <span className="text-muted-foreground">Morning</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-secondary" />
+              <div className="w-3 h-3 rounded-full bg-chart-orange" />
               <span className="text-muted-foreground">Midday</span>
             </div>
             <div className="flex items-center gap-2">
