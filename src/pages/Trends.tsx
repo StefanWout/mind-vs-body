@@ -5,13 +5,14 @@ import { useAuth } from '@/hooks/useAuth';
 import { DailyEntry } from '@/types/tracking';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { ArrowLeft, TrendingUp, Activity, Download } from 'lucide-react';
+import { ArrowLeft, TrendingUp, Activity, Download, ChevronLeft, ChevronRight } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 
 export default function Trends() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   const [entries, setEntries] = useState<DailyEntry[]>([]);
+  const [offset, setOffset] = useState(0);
 
   useEffect(() => {
     if (!loading && user) {
@@ -26,7 +27,7 @@ export default function Trends() {
 
   const moodData = useMemo(() => {
     return entries
-      .slice(0, 14)
+      .slice(offset, offset + 14)
       .reverse()
       .map(entry => ({
         date: new Date(entry.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
@@ -34,53 +35,65 @@ export default function Trends() {
         midday: entry.moodMidday || 0,
         evening: entry.moodEvening || 0,
       }));
-  }, [entries]);
+  }, [entries, offset]);
 
   const periodData = useMemo(() => {
     const statusMap = { heavy: 4, light: 2, patchy: 3, cramps: 1, none: 0 };
     return entries
-      .slice(0, 14)
+      .slice(offset, offset + 14)
       .reverse()
       .map(entry => ({
         date: new Date(entry.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
         intensity: entry.periodStatus ? statusMap[entry.periodStatus] : 0,
       }));
-  }, [entries]);
+  }, [entries, offset]);
 
   const productivityData = useMemo(() => {
     return entries
-      .slice(0, 14)
+      .slice(offset, offset + 14)
       .reverse()
       .map(entry => ({
         date: new Date(entry.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
         morning: entry.morningProductivity || 0,
         afternoon: entry.afternoonProductivity || 0,
       }));
-  }, [entries]);
+  }, [entries, offset]);
 
   const sleepData = useMemo(() => {
     return entries
-      .slice(0, 14)
+      .slice(offset, offset + 14)
       .reverse()
       .map(entry => ({
         date: new Date(entry.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
         quality: entry.sleepQuality || 0,
         pee: entry.gotUpToPee,
       }));
-  }, [entries]);
+  }, [entries, offset]);
 
   const nauseaCount = useMemo(() => {
-    const last14 = entries.slice(0, 14);
+    const last14 = entries.slice(offset, offset + 14);
     return last14.filter(e => e.nausea === true).length;
-  }, [entries]);
+  }, [entries, offset]);
 
   const avgMood = useMemo(() => {
     const moods = entries
-      .slice(0, 14)
+      .slice(offset, offset + 14)
       .flatMap(e => [e.moodMorning, e.moodMidday, e.moodEvening])
       .filter((m): m is number => m !== null);
     return moods.length > 0 ? (moods.reduce((a, b) => a + b, 0) / moods.length).toFixed(1) : 'N/A';
-  }, [entries]);
+  }, [entries, offset]);
+
+  const dateRange = useMemo(() => {
+    const currentEntries = entries.slice(offset, offset + 14);
+    if (currentEntries.length === 0) return '';
+    const oldest = currentEntries[currentEntries.length - 1]?.date;
+    const newest = currentEntries[0]?.date;
+    if (!oldest || !newest) return '';
+    return `${new Date(oldest).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })} - ${new Date(newest).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}`;
+  }, [entries, offset]);
+
+  const canGoNewer = offset > 0;
+  const canGoOlder = offset + 14 < entries.length;
 
   const downloadCSV = () => {
     const headers = [
@@ -154,30 +167,54 @@ export default function Trends() {
   return (
     <div className="min-h-screen bg-gradient-soft pb-24">
       <header className="sticky top-0 z-10 bg-card/80 backdrop-blur-lg border-b border-border">
-        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => navigate('/')}
-              className="rounded-full"
-            >
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-            <div>
-              <h1 className="text-xl font-bold text-foreground">Trends & Insights</h1>
-              <p className="text-sm text-muted-foreground">Last 14 days</p>
+        <div className="max-w-4xl mx-auto px-4 py-4">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-3">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => navigate('/')}
+                className="rounded-full"
+              >
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
+              <div>
+                <h1 className="text-xl font-bold text-foreground">Trends & Insights</h1>
+                <p className="text-sm text-muted-foreground">{dateRange}</p>
+              </div>
             </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={downloadCSV}
+              className="gap-2"
+            >
+              <Download className="h-4 w-4" />
+              Export CSV
+            </Button>
           </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={downloadCSV}
-            className="gap-2"
-          >
-            <Download className="h-4 w-4" />
-            Export CSV
-          </Button>
+          <div className="flex items-center justify-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setOffset(offset + 14)}
+              disabled={!canGoOlder}
+              className="gap-1"
+            >
+              <ChevronLeft className="h-4 w-4" />
+              Older
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setOffset(Math.max(0, offset - 14))}
+              disabled={!canGoNewer}
+              className="gap-1"
+            >
+              Newer
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
       </header>
 
