@@ -71,13 +71,13 @@ export default function Trends() {
   }, [entries, offset]);
 
   const nauseaCount = useMemo(() => {
-    const last14 = entries.slice(offset, offset + 14);
-    return last14.filter(e => e.nausea === true).length;
+    const last7 = entries.slice(offset, offset + 7);
+    return last7.filter(e => e.nausea === true).length;
   }, [entries, offset]);
 
   const avgMood = useMemo(() => {
     const moods = entries
-      .slice(offset, offset + 14)
+      .slice(offset, offset + 7)
       .flatMap(e => [e.moodMorning, e.moodMidday, e.moodEvening])
       .filter((m): m is number => m !== null);
     return moods.length > 0 ? (moods.reduce((a, b) => a + b, 0) / moods.length).toFixed(1) : 'N/A';
@@ -223,7 +223,7 @@ export default function Trends() {
           <Card className="p-6 shadow-card border-border">
             <div className="flex items-center gap-2 text-muted-foreground mb-2">
               <Activity className="h-4 w-4" />
-              <span className="text-sm font-medium">Avg Mood</span>
+              <span className="text-sm font-medium">Avg Mood (Last 7 Days)</span>
             </div>
             <p className="text-3xl font-bold text-foreground">{avgMood}</p>
           </Card>
@@ -231,7 +231,7 @@ export default function Trends() {
           <Card className="p-6 shadow-card border-border">
             <div className="flex items-center gap-2 text-muted-foreground mb-2">
               <TrendingUp className="h-4 w-4" />
-              <span className="text-sm font-medium">Nausea Days</span>
+              <span className="text-sm font-medium">Nausea Days (Last 7 Days)</span>
             </div>
             <p className="text-3xl font-bold text-foreground">{nauseaCount}</p>
           </Card>
