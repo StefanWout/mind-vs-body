@@ -70,6 +70,20 @@ export default function Trends() {
       }));
   }, [entries, offset]);
 
+  const painData = useMemo(() => {
+    return entries
+      .slice(offset, offset + 14)
+      .reverse()
+      .map(entry => ({
+        date: new Date(entry.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+        nausea: entry.nausea,
+        nauseaTime: entry.nauseaTime,
+        headache: entry.hadHeadache,
+        headacheTime: entry.headacheTime,
+        medication: entry.tookMedication,
+      }));
+  }, [entries, offset]);
+
   const nauseaCount = useMemo(() => {
     const last7 = entries.slice(offset, offset + 7);
     return last7.filter(e => e.nausea === true).length;
@@ -386,6 +400,54 @@ export default function Trends() {
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-chart-yellow" />
               <span className="text-muted-foreground">Got up to pee</span>
+            </div>
+          </div>
+        </Card>
+
+        <Card className="p-6 shadow-card border-border">
+          <h2 className="text-lg font-semibold text-foreground mb-4">Pain & Discomfort</h2>
+          <div className="space-y-3">
+            {painData.map((day, idx) => (
+              <div key={idx} className="flex items-center justify-between py-2 border-b border-border last:border-0">
+                <span className="text-sm font-medium text-muted-foreground min-w-[80px]">{day.date}</span>
+                <div className="flex items-center gap-4 flex-1 justify-end">
+                  {day.nausea && (
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-3 h-3 rounded-full bg-green-500" />
+                      <span className="text-xs text-muted-foreground">{day.nauseaTime || 'N/A'}</span>
+                    </div>
+                  )}
+                  {day.headache && (
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-3 h-3 rounded-full bg-red-500" />
+                      <span className="text-xs text-muted-foreground">{day.headacheTime || 'N/A'}</span>
+                    </div>
+                  )}
+                  {day.medication && (
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-3 h-3 rounded-full bg-blue-500" />
+                      <span className="text-xs text-muted-foreground">Med</span>
+                    </div>
+                  )}
+                  {!day.nausea && !day.headache && !day.medication && (
+                    <span className="text-xs text-muted-foreground italic">No events</span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="flex justify-center gap-6 mt-6 text-sm flex-wrap">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-green-500" />
+              <span className="text-muted-foreground">Nausea</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-red-500" />
+              <span className="text-muted-foreground">Headache</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-blue-500" />
+              <span className="text-muted-foreground">Medication</span>
             </div>
           </div>
         </Card>
