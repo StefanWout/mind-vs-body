@@ -317,8 +317,8 @@ export default function Trends() {
                       cx={cx}
                       cy={cy}
                       r={5}
-                      fill={payload.pee ? 'hsl(var(--destructive))' : 'hsl(var(--primary))'}
-                      stroke={payload.pee ? 'hsl(var(--destructive))' : 'hsl(var(--primary))'}
+                      fill={payload.pee ? 'hsl(var(--chart-yellow))' : 'hsl(var(--primary))'}
+                      stroke={payload.pee ? 'hsl(var(--chart-yellow))' : 'hsl(var(--primary))'}
                       strokeWidth={2}
                     />
                   );
@@ -332,7 +332,7 @@ export default function Trends() {
               <span className="text-muted-foreground">Normal night</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-destructive" />
+              <div className="w-3 h-3 rounded-full bg-chart-yellow" />
               <span className="text-muted-foreground">Got up to pee</span>
             </div>
           </div>

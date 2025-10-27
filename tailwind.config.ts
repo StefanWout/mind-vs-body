@@ -45,6 +45,7 @@ export default {
         chart: {
           orange: "hsl(var(--chart-orange))",
           purple: "hsl(var(--chart-purple))",
+          yellow: "hsl(var(--chart-yellow))",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
