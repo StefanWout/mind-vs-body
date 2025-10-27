@@ -18,6 +18,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 import { ArrowLeft, Save, CalendarIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import type { DayModifiers } from 'react-day-picker';
 
 export default function DailyLog() {
   const navigate = useNavigate();
@@ -33,6 +34,7 @@ export default function DailyLog() {
     }
     return new Date();
   });
+  const [datesWithEntries, setDatesWithEntries] = useState<Date[]>([]);
   const [entry, setEntry] = useState<Partial<DailyEntry>>({
     date: today,
     periodStatus: null,
@@ -60,8 +62,18 @@ export default function DailyLog() {
   useEffect(() => {
     if (!loading && user) {
       loadEntry();
+      loadEntryDates();
     }
   }, [loading, user, selectedDate]);
+
+  const loadEntryDates = async () => {
+    const allEntries = await storage.getEntries();
+    const dates = allEntries.map(entry => {
+      const [year, month, day] = entry.date.split('-').map(Number);
+      return new Date(year, month - 1, day);
+    });
+    setDatesWithEntries(dates);
+  };
 
   const loadEntry = async () => {
     const dateString = format(selectedDate, 'yyyy-MM-dd');
@@ -127,6 +139,7 @@ export default function DailyLog() {
 
     try {
       await storage.saveEntry(completeEntry);
+      await loadEntryDates(); // Refresh calendar highlights
       toast.success('Entry saved successfully!');
       navigate('/');
     } catch (error) {
@@ -173,6 +186,8 @@ export default function DailyLog() {
                   disabled={(date) => date > new Date()}
                   initialFocus
                   className={cn("p-3 pointer-events-auto")}
+                  modifiers={{ hasEntry: datesWithEntries }}
+                  modifiersClassNames={{ hasEntry: 'has-entry' }}
                 />
               </PopoverContent>
             </Popover>

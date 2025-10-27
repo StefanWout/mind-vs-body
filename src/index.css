@@ -130,4 +130,13 @@ All colors MUST be HSL.
   .transition-smooth {
     transition: var(--transition-smooth);
   }
+  
+  .has-entry {
+    @apply relative;
+  }
+  
+  .has-entry::after {
+    content: '';
+    @apply absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary;
+  }
 }
