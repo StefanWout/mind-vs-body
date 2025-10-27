@@ -42,6 +42,10 @@ export default {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
         },
+        chart: {
+          orange: "hsl(var(--chart-orange))",
+          purple: "hsl(var(--chart-purple))",
+        },
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",

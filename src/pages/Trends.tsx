@@ -275,17 +275,17 @@ export default function Trends() {
                   borderRadius: '12px',
                 }}
               />
-              <Line type="monotone" dataKey="morning" stroke="hsl(var(--chart-1))" strokeWidth={2} dot={{ r: 4 }} />
-              <Line type="monotone" dataKey="afternoon" stroke="hsl(var(--chart-2))" strokeWidth={2} dot={{ r: 4 }} />
+              <Line type="monotone" dataKey="morning" stroke="hsl(var(--chart-orange))" strokeWidth={2} dot={{ r: 4 }} />
+              <Line type="monotone" dataKey="afternoon" stroke="hsl(var(--chart-purple))" strokeWidth={2} dot={{ r: 4 }} />
             </LineChart>
           </ResponsiveContainer>
           <div className="flex justify-center gap-6 mt-4 text-sm">
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-chart-1" />
+              <div className="w-3 h-3 rounded-full bg-chart-orange" />
               <span className="text-muted-foreground">Morning</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-chart-2" />
+              <div className="w-3 h-3 rounded-full bg-chart-purple" />
               <span className="text-muted-foreground">Afternoon</span>
             </div>
           </div>

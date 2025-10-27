@@ -35,6 +35,9 @@ All colors MUST be HSL.
     --destructive: 0 70% 60%;
     --destructive-foreground: 0 0% 100%;
 
+    --chart-orange: 30 85% 55%;
+    --chart-purple: 270 60% 65%;
+
     --border: 30 20% 90%;
     --input: 30 20% 92%;
     --ring: 180 65% 55%;
@@ -78,6 +81,9 @@ All colors MUST be HSL.
 
     --destructive: 0 65% 55%;
     --destructive-foreground: 0 0% 100%;
+
+    --chart-orange: 30 80% 50%;
+    --chart-purple: 270 55% 60%;
 
     --border: 280 15% 20%;
     --input: 280 15% 22%;
