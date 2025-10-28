@@ -90,6 +90,8 @@ export default function Trends() {
           wentToOffice: entry.wentToOffice,
           wentToGym: entry.wentToGym,
           gymIntensity: entry.gymIntensity,
+          poopQuantity: entry.poopQuantity,
+          poopConsistency: entry.poopConsistency,
         };
       });
   }, [entries, offset]);
@@ -426,6 +428,7 @@ export default function Trends() {
                   <th className="text-center py-3 px-2 text-sm font-semibold text-foreground">Period</th>
                   <th className="text-center py-3 px-2 text-sm font-semibold text-foreground">Office</th>
                   <th className="text-center py-3 px-2 text-sm font-semibold text-foreground">Exercise</th>
+                  <th className="text-center py-3 px-2 text-sm font-semibold text-foreground">Poops</th>
                   <th className="text-center py-3 px-2 text-sm font-semibold text-foreground">
                     <div className="flex items-center justify-center gap-1.5">
                       <div className="w-3 h-3 rounded-full bg-green-500" />
@@ -495,6 +498,20 @@ export default function Trends() {
                             ? `Yes${day.gymIntensity ? ` (${day.gymIntensity}/5)` : ''}`
                             : '—'}
                         </span>
+                      </td>
+                      <td className="py-3 px-2 text-center">
+                        {day.poopQuantity ? (
+                          <div className="flex items-center justify-center gap-1">
+                            <span className="text-xs font-medium text-foreground">{day.poopQuantity}</span>
+                            <span className="text-sm">
+                              {day.poopConsistency === 'liquid' && '💧'}
+                              {day.poopConsistency === 'soft' && '🟤'}
+                              {day.poopConsistency === 'solid' && '⚫'}
+                            </span>
+                          </div>
+                        ) : (
+                          <span className="text-xs text-muted-foreground">—</span>
+                        )}
                       </td>
                       <td className="py-3 px-2 text-center">
                         {day.nausea ? (
