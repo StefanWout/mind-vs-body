@@ -5,7 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { DailyEntry } from '@/types/tracking';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { ArrowLeft, TrendingUp, Activity, Download, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowLeft, TrendingUp, Activity, Download, ChevronLeft, ChevronRight, Droplets, Wind, Circle } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 
 export default function Trends() {
@@ -417,7 +417,7 @@ export default function Trends() {
         </Card>
 
         <Card className="p-6 shadow-card border-border">
-          <h2 className="text-lg font-semibold text-foreground mb-4">Pain & Discomfort</h2>
+          <h2 className="text-lg font-semibold text-foreground mb-4">Stats Table</h2>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
@@ -501,13 +501,11 @@ export default function Trends() {
                       </td>
                       <td className="py-3 px-2 text-center">
                         {day.poopQuantity ? (
-                          <div className="flex items-center justify-center gap-1">
+                          <div className="flex items-center justify-center gap-1.5">
                             <span className="text-xs font-medium text-foreground">{day.poopQuantity}</span>
-                            <span className="text-sm">
-                              {day.poopConsistency === 'liquid' && '💧'}
-                              {day.poopConsistency === 'soft' && '🟤'}
-                              {day.poopConsistency === 'solid' && '⚫'}
-                            </span>
+                            {day.poopConsistency === 'liquid' && <Droplets className="h-3.5 w-3.5 text-muted-foreground" />}
+                            {day.poopConsistency === 'soft' && <Wind className="h-3.5 w-3.5 text-muted-foreground" />}
+                            {day.poopConsistency === 'solid' && <Circle className="h-3.5 w-3.5 text-muted-foreground" />}
                           </div>
                         ) : (
                           <span className="text-xs text-muted-foreground">—</span>
