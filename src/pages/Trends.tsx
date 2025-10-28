@@ -70,6 +70,24 @@ export default function Trends() {
       }));
   }, [entries, offset]);
 
+  const combinedMetricsData = useMemo(() => {
+    return entries
+      .slice(offset, offset + 14)
+      .reverse()
+      .map(entry => {
+        const moods = [entry.moodMorning, entry.moodMidday, entry.moodEvening].filter((m): m is number => m !== null);
+        const avgMood = moods.length > 0 ? moods.reduce((a, b) => a + b, 0) / moods.length : null;
+        const productivityScores = [entry.morningProductivity, entry.afternoonProductivity].filter((p): p is number => p !== null);
+        const avgProductivity = productivityScores.length > 0 ? productivityScores.reduce((a, b) => a + b, 0) / productivityScores.length : null;
+        return {
+          date: new Date(entry.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+          avgMood,
+          sleepQuality: entry.sleepQuality,
+          avgProductivity,
+        };
+      });
+  }, [entries, offset]);
+
   const painData = useMemo(() => {
     return entries
       .slice(offset, offset + 14)
@@ -412,6 +430,41 @@ export default function Trends() {
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-chart-yellow" />
               <span className="text-muted-foreground">Got up to pee</span>
+            </div>
+          </div>
+        </Card>
+
+        <Card className="p-6 shadow-card border-border">
+          <h2 className="text-lg font-semibold text-foreground mb-4">Average Mood, Sleep & Productivity</h2>
+          <ResponsiveContainer width="100%" height={250}>
+            <LineChart data={combinedMetricsData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+              <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" style={{ fontSize: '12px' }} />
+              <YAxis stroke="hsl(var(--muted-foreground))" domain={[0, 5]} />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: 'hsl(var(--card))',
+                  border: '1px solid hsl(var(--border))',
+                  borderRadius: '12px',
+                }}
+              />
+              <Line type="monotone" dataKey="avgMood" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ r: 4 }} name="Avg Mood" />
+              <Line type="monotone" dataKey="sleepQuality" stroke="hsl(var(--chart-purple))" strokeWidth={2} dot={{ r: 4 }} name="Sleep Quality" />
+              <Line type="monotone" dataKey="avgProductivity" stroke="hsl(var(--chart-orange))" strokeWidth={2} dot={{ r: 4 }} name="Avg Productivity" />
+            </LineChart>
+          </ResponsiveContainer>
+          <div className="flex justify-center gap-6 mt-4 text-sm">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-primary" />
+              <span className="text-muted-foreground">Avg Mood</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-chart-purple" />
+              <span className="text-muted-foreground">Sleep Quality</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-chart-orange" />
+              <span className="text-muted-foreground">Avg Productivity</span>
             </div>
           </div>
         </Card>
